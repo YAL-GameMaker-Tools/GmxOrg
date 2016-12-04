@@ -1,6 +1,5 @@
 package;
 import haxe.io.Path;
-import neko.Lib;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -15,6 +14,15 @@ class GmxOrg {
 		throw text;
 	}
 	
+	/// "dir\name.ext" -> "name"
+	static function id(s:String):String {
+		var i = s.lastIndexOf("\\");
+		if (i >= 0) s = s.substring(i + 1);
+		i = s.indexOf(".");
+		if (i >= 0) s = s.substring(0, i);
+		return s;
+	}
+
 	static function main() {
 		var args = Sys.args();
 		if (args.length < 1) {
@@ -36,14 +44,6 @@ class GmxOrg {
 			gmxRoot = Xml.parse(File.getContent(pathOut));
 		}
 		var gmxAssets = gmxRoot.elementsNamed("assets").next();
-		/// "dir\name.ext" -> "name"
-		function id(s:String):String {
-			var i = s.lastIndexOf("\\");
-			if (i >= 0) s = s.substring(i + 1);
-			i = s.indexOf(".");
-			if (i >= 0) s = s.substring(0, i);
-			return s;
-		}
 		var kinds = ["sounds", "sprites", "backgrounds", "paths", "scripts",
 			"fonts", "timelines", "objects", "rooms"];
 		if (export) {
